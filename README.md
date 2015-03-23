@@ -1,5 +1,9 @@
 # Go utils
-This is a utils library for Go with some functions and structs from other languages (like Ruby, Java) that don't come in the Go core and can be helpful.
+Go-utils is a library written in Go with some functionality that can be helpful for others.
+
+I've programmed in different langueges (Ruby, Java, etc), and always there's something that you want from a specific language to be implemented in other (methods such as `map`, `select` from Ruby, classes like `ArrayList` from Java), etc.
+
+Here you will find these implementations for Go.
 
 ## ArrayList
 In the Java world, arraylists are very common. Go utils implements an ArrayList struct, just like the ArrayList in Java.
