@@ -10,6 +10,11 @@ type ArrayList struct {
 	slice []interface{}
 }
 
+// New returns a new *ArrayList
+func New() *ArrayList {
+	return new(ArrayList)
+}
+
 // Add appends the specified elements to the end of this list.
 // objs -> are the elements to be appended to this list.
 func (a *ArrayList) Add(objs ...interface{}) {
