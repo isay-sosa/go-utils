@@ -4,6 +4,36 @@ This is a utils library for Go with some functions and structs from other langua
 ## ArrayList
 In the Java world, arraylists are very common. Go utils implements an ArrayList struct, just like the ArrayList in Java.
 
+    func main() {
+        list := new(ArrayList)
+
+        // Adding an element
+        list.Add("Element")
+        list.Add(true)
+        list.Add(7)
+
+        // Adding several elements
+        list.Add("Foo", 20, false, nil, "Bar")
+
+        list.Size() // => 8
+
+        // Getting an element
+        el, err := list.Get(1) // => true, nil
+        el, err = list.Get(-1) // => nil, index out of range
+
+        // Remove an element
+        err := list.RemoveAt(1) // => nil
+        list.Size()             // => 7
+
+        err = list.RemoveAt(9)  // => index out of range
+        err = list.Remove(true) // => element not found
+        err = list.Remove(7)    // => nil
+        list.Size()             // => 6
+
+        // To Slice
+        slice := list.Slice() // => ["Element", "Foo", 20, false, nil, "Bar"]
+    }
+
 ## Map
 This function is based on Ruby's map. It receives a slice and a function (mapFunc) and returns a new slice containing the returned values by the mapFunc.
 
