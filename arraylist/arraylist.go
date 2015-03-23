@@ -48,7 +48,14 @@ func (a *ArrayList) AddFirst(objs ...interface{}) {
 
 // Clear removes all of the elements from this list.
 func (a *ArrayList) Clear() {
+	tempSlice := a.slice
 	a.slice = []interface{}{}
+
+	go func() {
+		for i, _ := range tempSlice {
+			tempSlice[i] = nil
+		}
+	}()
 }
 
 // Get returns the element at the specified position in this list.
@@ -114,6 +121,7 @@ func (a *ArrayList) RemoveAt(pos int) error {
 		return err
 	}
 
+	a.slice[pos] = nil
 	a.slice = append(a.slice[:pos], a.slice[pos+1:]...)
 	return nil
 }
@@ -129,18 +137,8 @@ func (a *ArrayList) Slice() []interface{} {
 	return append([]interface{}{}, a.slice...)
 }
 
-// func (a *ArrayList) addAt(pos int, obj interface{}) {
-// 	tempSlice := []interface{}{}
-// 	tempSlice = append(tempSlice, a.slice[:pos]...)
-// 	tempSlice = append(tempSlice, obj)
-// 	a.slice = append(tempSlice, a.slice[pos:]...)
-// }
-
 func (a *ArrayList) addAt(pos int, elements ...interface{}) {
-	tempSlice := []interface{}{}
-	tempSlice = append(tempSlice, a.slice[:pos]...)
-	tempSlice = append(tempSlice, elements...)
-	a.slice = append(tempSlice, a.slice[pos:]...)
+	a.slice = append(append(append([]interface{}{}, a.slice[:pos]...), elements...), a.slice[pos:]...)
 }
 
 func (a *ArrayList) checkRangeForAddAt(pos int) error {
