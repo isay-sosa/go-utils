@@ -49,13 +49,13 @@ This function is based on Ruby's map. It receives a slice and a function (mapFun
             &User{3, "User 3"},
         }
 
-        names := Map(users, func(obj interface{}) interface{} {
+        names, _ := Map(users, func(obj interface{}) interface{} {
             return obj.(*User).Name
         })
 
         fmt.Println(names) // => [User 1, User 2, User 3]
 
-        ids := Map(users, func(obj interface{}) interface{} {
+        ids, _ := Map(users, func(obj interface{}) interface{} {
             return obj.(*User).ID
         })
 
@@ -78,13 +78,13 @@ This function is based on Ruby's select. It receives a slice and a function (sel
             &User{3, "User 3", 18},
         }
 
-        adults := Select(users, func(obj interface{}) bool {
+        adults, _ := Select(users, func(obj interface{}) bool {
             return obj.(*User).Age >= 18
         })
 
         fmt.Println(adults) // => [&User{1, "User 1", 20}, &User{3, "User 3", 18}]
 
-        teens := Select(users, func(obj interface{}) bool {
+        teens, _ := Select(users, func(obj interface{}) bool {
             return obj.(*User).Age < 18
         })
 
