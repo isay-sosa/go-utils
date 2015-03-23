@@ -31,3 +31,32 @@ This function is based on Ruby's map. It receives a slice and a function (mapFun
 
         fmt.Println(ids) // => [1, 2, 3]
     }
+
+## Select
+This function is based on Ruby's select. It receives a slice and a function (selectFunc) and returns a new slice containing the elements of which the selectFunc returns true.
+
+    type User struct {
+        ID   int
+        Name string
+        Age  int
+    }
+
+    func main() {
+        users := []*User{
+            &User{1, "User 1", 20},
+            &User{2, "User 2", 16},
+            &User{3, "User 3", 18},
+        }
+
+        adults := Select(users, func(obj interface{}) bool {
+            return obj.(*User).Age >= 18
+        })
+
+        fmt.Println(adults) // => [&User{1, "User 1", 20}, &User{3, "User 3", 18}]
+
+        teens := Select(users, func(obj interface{}) bool {
+            return obj.(*User).Age < 18
+        })
+
+        fmt.Println(teens) // => [&User{2, "User 2", 16}]
+    }
