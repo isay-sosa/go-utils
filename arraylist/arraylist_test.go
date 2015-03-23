@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestAdd(t *testing.T) {
+func TestAdd_Single(t *testing.T) {
 	list := new(ArrayList)
 
 	list.Add("First Element")
@@ -20,7 +20,25 @@ func TestAdd(t *testing.T) {
 	}
 }
 
-func TestAddAt(t *testing.T) {
+func TestAdd_Several(t *testing.T) {
+	slice := make([]interface{}, 10)
+	for i := 0; i < 10; i++ {
+		slice[i] = fmt.Sprintf("Element %d", i)
+	}
+
+	list := new(ArrayList)
+
+	if size := list.Size(); size != 0 {
+		t.Errorf("ArrayList should have a size of 0, but has %d", size)
+	}
+
+	list.Add(slice...)
+	if size := list.Size(); size != 10 {
+		t.Errorf("ArrayList should have a size of 10, but has %d", size)
+	}
+}
+
+func TestAddAt_Single(t *testing.T) {
 	list := new(ArrayList)
 	for i := 0; i < 10; i++ {
 		list.Add(fmt.Sprintf("Element %d", i))
@@ -58,15 +76,13 @@ func TestAddAt(t *testing.T) {
 	}
 }
 
-func TestAddSliceAt(t *testing.T) {
+func TestAddAt_Several(t *testing.T) {
 	list := new(ArrayList)
 	for i := 0; i < 10; i++ {
 		list.Add(fmt.Sprintf("Element %d", i))
 	}
 
-	slice := []interface{}{"Element 10", "Element 11", "Element 12"}
-
-	list.AddSliceAt(7, slice)
+	list.AddAt(7, "Element 10", "Element 11", "Element 12")
 	if size := list.Size(); size != 13 {
 		t.Errorf("ArrayList should have a size of 13, but has %d", size)
 	}
@@ -78,11 +94,11 @@ func TestAddSliceAt(t *testing.T) {
 		}
 	}
 
-	if err := list.AddSliceAt(20, []interface{}{"Not Inserted"}); err == nil {
+	if err := list.AddAt(20, "Not Inserted"); err == nil {
 		t.Error("Error should be index out of range")
 	}
 
-	list.AddSliceAt(0, []interface{}{"First Element"})
+	list.AddAt(0, "First Element")
 	if size := list.Size(); size != 14 {
 		t.Errorf("ArrayList should have a size of 14, but has %d", size)
 	}
@@ -91,7 +107,7 @@ func TestAddSliceAt(t *testing.T) {
 		t.Errorf("ArrayList 0 element should be 'First Element', but was '%s'", obj)
 	}
 
-	list.AddSliceAt(list.Size(), []interface{}{"Last Element"})
+	list.AddAt(list.Size(), "Last Element")
 	if size := list.Size(); size != 15 {
 		t.Errorf("ArrayList should have a size of 15, but has %d", size)
 	}
@@ -101,7 +117,7 @@ func TestAddSliceAt(t *testing.T) {
 	}
 }
 
-func TestAddFirst(t *testing.T) {
+func TestAddFirst_Single(t *testing.T) {
 	list := new(ArrayList)
 	for i := 1; i < 10; i++ {
 		list.Add(fmt.Sprintf("Element %d", i))
@@ -117,25 +133,7 @@ func TestAddFirst(t *testing.T) {
 	}
 }
 
-func TestAddSlice(t *testing.T) {
-	slice := make([]interface{}, 10)
-	for i := 0; i < 10; i++ {
-		slice[i] = fmt.Sprintf("Element %d", i)
-	}
-
-	list := new(ArrayList)
-
-	if size := list.Size(); size != 0 {
-		t.Errorf("ArrayList should have a size of 0, but has %d", size)
-	}
-
-	list.AddSlice(slice)
-	if size := list.Size(); size != 10 {
-		t.Errorf("ArrayList should have a size of 10, but has %d", size)
-	}
-}
-
-func TestAddSliceFirst(t *testing.T) {
+func TestAddFirst_Several(t *testing.T) {
 	list := new(ArrayList)
 	for i := 10; i < 20; i++ {
 		list.Add(fmt.Sprintf("Element %d", i))
@@ -150,7 +148,7 @@ func TestAddSliceFirst(t *testing.T) {
 		slice[i] = fmt.Sprintf("Element %d", i)
 	}
 
-	list.AddSliceFirst(slice)
+	list.AddFirst(slice...)
 
 	if size := list.Size(); size != 20 {
 		t.Errorf("ArrayList should have a size of 20, but has %d", size)
@@ -228,7 +226,7 @@ func TestIndexOf(t *testing.T) {
 func TestLastIndexOf(t *testing.T) {
 	list := new(ArrayList)
 	slice := []interface{}{"Repeated Element", "Second Element", "Repeated Element", "Last Element"}
-	list.AddSlice(slice)
+	list.Add(slice...)
 
 	if i := list.LastIndexOf("Repeated Element"); i != 2 {
 		t.Errorf("Last index of element should be 2, but was %d", i)

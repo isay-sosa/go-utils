@@ -10,76 +10,40 @@ type ArrayList struct {
 	slice []interface{}
 }
 
-// Add appends the specified element to the end of this list.
-// obj -> is the element to be appended to this list.
-func (a *ArrayList) Add(obj interface{}) {
-	a.slice = append(a.slice, obj)
+// Add appends the specified elements to the end of this list.
+// objs -> are the elements to be appended to this list.
+func (a *ArrayList) Add(objs ...interface{}) {
+	a.slice = append(a.slice, objs...)
 }
 
-// AddAt inserts the specified element at the specified position in this list.
+// AddAt inserts the specified elements at the specified position in this list.
 // pos -> is the position at which the specified element is to be inserted (0-based).
-// obj -> is the element to be appended to this list.
+// objs -> are the elements to be appended to this list.
 // If pos is more than the list size or less than 0, then index out of range
 // error is returned. Nil otherwise.
-func (a *ArrayList) AddAt(pos int, obj interface{}) error {
+func (a *ArrayList) AddAt(pos int, objs ...interface{}) error {
 	if err := a.checkRangeForAddAt(pos); err != nil {
 		return err
 	}
 
 	switch pos {
 	case 0:
-		a.AddFirst(obj)
+		a.AddFirst(objs...)
 		break
 	case a.Size():
-		a.Add(obj)
+		a.Add(objs...)
 		break
 	default:
-		a.addAt(pos, obj)
+		a.addAt(pos, objs...)
 	}
 
 	return nil
 }
 
-// AddFirst inserts the specified element to the begining of this list.
-// obj -> is the element to be appended to this list.
-func (a *ArrayList) AddFirst(obj interface{}) {
-	a.slice = append([]interface{}{obj}, a.slice...)
-}
-
-// AddSlice appends all of the elements in the specified slice to the end of this list.
-// slice -> is the slice containing elements to be added to this list.
-func (a *ArrayList) AddSlice(slice []interface{}) {
-	a.slice = append(a.slice, slice...)
-}
-
-// AddSliceFirst inserts all of the elements in the specified slice to the begining of this list.
-// slice -> is the slice containing elements to be added to this list.
-func (a *ArrayList) AddSliceFirst(slice []interface{}) {
-	a.slice = append(slice, a.slice...)
-}
-
-// AddSliceAt inserts all of the elements in the specified slice at the specified position in this list.
-// pos -> is the position at which all of the elements in the specified slice are to be inserted (0-based).
-// slice -> is the slice containing elements to be added to this list.
-// If pos is more than the list size or less than 0, then index out of range
-// error is returned. Nil otherwise.
-func (a *ArrayList) AddSliceAt(pos int, slice []interface{}) error {
-	if err := a.checkRangeForAddAt(pos); err != nil {
-		return err
-	}
-
-	switch pos {
-	case 0:
-		a.AddSliceFirst(slice)
-		break
-	case a.Size():
-		a.AddSlice(slice)
-		break
-	default:
-		a.addSliceAt(pos, slice)
-	}
-
-	return nil
+// AddFirst inserts the specified elements to the beginning of this list.
+// objs -> are the elements to be appended to this list.
+func (a *ArrayList) AddFirst(objs ...interface{}) {
+	a.slice = append(objs, a.slice...)
 }
 
 // Clear removes all of the elements from this list.
@@ -165,17 +129,17 @@ func (a *ArrayList) Slice() []interface{} {
 	return append([]interface{}{}, a.slice...)
 }
 
-func (a *ArrayList) addAt(pos int, obj interface{}) {
-	tempSlice := []interface{}{}
-	tempSlice = append(tempSlice, a.slice[:pos]...)
-	tempSlice = append(tempSlice, obj)
-	a.slice = append(tempSlice, a.slice[pos:]...)
-}
+// func (a *ArrayList) addAt(pos int, obj interface{}) {
+// 	tempSlice := []interface{}{}
+// 	tempSlice = append(tempSlice, a.slice[:pos]...)
+// 	tempSlice = append(tempSlice, obj)
+// 	a.slice = append(tempSlice, a.slice[pos:]...)
+// }
 
-func (a *ArrayList) addSliceAt(pos int, slice []interface{}) {
+func (a *ArrayList) addAt(pos int, elements ...interface{}) {
 	tempSlice := []interface{}{}
 	tempSlice = append(tempSlice, a.slice[:pos]...)
-	tempSlice = append(tempSlice, slice...)
+	tempSlice = append(tempSlice, elements...)
 	a.slice = append(tempSlice, a.slice[pos:]...)
 }
 
