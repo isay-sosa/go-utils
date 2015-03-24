@@ -1,9 +1,12 @@
 package arraylist
 
 import (
-	"errors"
-	"fmt"
-	"reflect"
+	"github.com/OscarSwanros/go-utils/utils"
+)
+
+const (
+	ErrorElementNotFound = "The element was not found."
+	ErrorIndexOutOfRange = "Index out of range."
 )
 
 type ArrayList struct {
@@ -71,7 +74,7 @@ func (a *ArrayList) Get(pos int) (interface{}, error) {
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) IndexOf(obj interface{}) int {
 	for i, o := range a.slice {
-		if reflect.DeepEqual(o, obj) {
+		if utils.Equal(o, obj) {
 			return i
 		}
 	}
@@ -88,7 +91,7 @@ func (a *ArrayList) IsEmpty() bool {
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) LastIndexOf(obj interface{}) int {
 	for i := a.Size() - 1; i > -1; i-- {
-		if o := a.slice[i]; reflect.DeepEqual(o, obj) {
+		if o := a.slice[i]; utils.Equal(o, obj) {
 			return i
 		}
 	}
@@ -100,12 +103,12 @@ func (a *ArrayList) LastIndexOf(obj interface{}) int {
 // If element not found, it returns an element not found error.
 func (a *ArrayList) Remove(obj interface{}) error {
 	for i, o := range a.slice {
-		if reflect.DeepEqual(o, obj) {
+		if utils.Equal(o, obj) {
 			return a.RemoveAt(i)
 		}
 	}
 
-	return elementNotFoundErr(obj)
+	return utils.NewError(ErrorElementNotFound)
 }
 
 // RemoveAt removes the element at the specified position (0-based) in this list.
@@ -137,7 +140,7 @@ func (a *ArrayList) addAt(pos int, elements ...interface{}) {
 
 func (a *ArrayList) checkRangeForAddAt(pos int) error {
 	if pos > a.Size() || pos < 0 {
-		return indexOutOfRangeErr(pos, a.Size())
+		return utils.NewError(ErrorIndexOutOfRange)
 	}
 
 	return nil
@@ -145,20 +148,8 @@ func (a *ArrayList) checkRangeForAddAt(pos int) error {
 
 func (a *ArrayList) checkRange(pos int) error {
 	if pos > a.Size()-1 || pos < 0 {
-		return indexOutOfRangeErr(pos, a.Size())
+		return utils.NewError(ErrorIndexOutOfRange)
 	}
 
 	return nil
-}
-
-func elementNotFoundErr(obj interface{}) error {
-	return genErr(fmt.Sprintf("%v element was not found in this list.", obj))
-}
-
-func indexOutOfRangeErr(pos, listSize int) error {
-	return genErr(fmt.Sprintf("Index %d is out of range from a list size of %d", pos, listSize))
-}
-
-func genErr(e string) error {
-	return errors.New(e)
 }
