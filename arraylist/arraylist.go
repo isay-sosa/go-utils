@@ -51,16 +51,9 @@ func (a *ArrayList) AddHead(objs ...interface{}) {
 	a.slice = append(objs, a.slice...)
 }
 
-// Clear removes all of the elements from this list.
-func (a *ArrayList) Clear() {
-	tempSlice := a.slice
+// RemobeAll removes all of the elements from a list.
+func (a *ArrayList) RemoveAll() {
 	a.slice = []interface{}{}
-
-	go func() {
-		for i, _ := range tempSlice {
-			tempSlice[i] = nil
-		}
-	}()
 }
 
 // Get returns the element at the specified position in this list.
