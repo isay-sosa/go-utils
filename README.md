@@ -39,8 +39,26 @@ In the Java world, arraylists are very common. Go utils implements an ArrayList 
     }
 
 ## Slices functions
+### Combination
+This function is based on Ruby's `product` method. It receives several slices and combines all of them in a single slice.
+
+    c, _ := Combination([]int{1, 2, 3}, []int{4, 5})
+    // => [[1 4] [1 5] [2 4] [2 5] [3 4] [3 5]]
+
+    c, _ = Combination([]int{1, 2}, []int{1, 2})
+    // => [[1 1] [1 2] [2 1] [2 2]]
+
+    c, _ = Combination([]int{1, 2}, []int{3, 4}, []int{5, 6})
+    // => [[1 3 5] [1 3 6] [1 4 5] [1 4 6] [2 3 5] [2 3 6] [2 4 5] [2 4 6]]
+
+    c, _ = Combination([]int{1, 2})
+    // => [[1] [2]]
+
+    c, _ = Combination([]int{})
+    // => []
+
 ### IsIncluded
-This function is based on Ruby's include? method. It receives a slice and an object. It returns true if the object is included in the slice.
+This function is based on Ruby's `include?` method. It receives a slice and an object. It returns true if the object is included in the slice.
 
     slice := []string{"a", "b", "c", "d"}
     include, err := IsIncluded(slice, "c") // => true, nil
@@ -48,7 +66,7 @@ This function is based on Ruby's include? method. It receives a slice and an obj
     include, err = IsIncluded(slice, "z")  // => false, element not found
 
 ### Map
-This function is based on Ruby's map. It receives a slice and a function (mapFunc) and returns a new slice containing the returned values by the mapFunc.
+This function is based on Ruby's `map` method. It receives a slice and a function (mapFunc) and returns a new slice containing the returned values by the mapFunc.
 
     type User struct {
         ID   int
@@ -76,7 +94,7 @@ This function is based on Ruby's map. It receives a slice and a function (mapFun
     }
 
 ### Select
-This function is based on Ruby's select. It receives a slice and a function (selectFunc) and returns a new slice containing the elements of which the selectFunc returns true.
+This function is based on Ruby's `select` method. It receives a slice and a function (selectFunc) and returns a new slice containing the elements of which the selectFunc returns true.
 
     type User struct {
         ID   int

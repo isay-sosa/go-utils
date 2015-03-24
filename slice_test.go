@@ -2,11 +2,73 @@ package utils
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
 type TestStruct struct {
 	Value string
+}
+
+func TestCombination(t *testing.T) {
+	c, _ := Combination([]int{1, 2, 3}, []int{4, 5})
+	expectCombination := []interface{}{
+		[]interface{}{1, 4},
+		[]interface{}{1, 5},
+		[]interface{}{2, 4},
+		[]interface{}{2, 5},
+		[]interface{}{3, 4},
+		[]interface{}{3, 5},
+	}
+
+	if !reflect.DeepEqual(c, expectCombination) {
+		t.Errorf("%v is not equal to %v", c, expectCombination)
+	}
+
+	c, _ = Combination([]int{1, 2}, []int{1, 2})
+	expectCombination = []interface{}{
+		[]interface{}{1, 1},
+		[]interface{}{1, 2},
+		[]interface{}{2, 1},
+		[]interface{}{2, 2},
+	}
+
+	if !reflect.DeepEqual(c, expectCombination) {
+		t.Errorf("%v is not equal to %v", c, expectCombination)
+	}
+
+	c, _ = Combination([]int{1, 2}, []int{3, 4}, []int{5, 6})
+	expectCombination = []interface{}{
+		[]interface{}{1, 3, 5},
+		[]interface{}{1, 3, 6},
+		[]interface{}{1, 4, 5},
+		[]interface{}{1, 4, 6},
+		[]interface{}{2, 3, 5},
+		[]interface{}{2, 3, 6},
+		[]interface{}{2, 4, 5},
+		[]interface{}{2, 4, 6},
+	}
+
+	if !reflect.DeepEqual(c, expectCombination) {
+		t.Errorf("%v is not equal to %v", c, expectCombination)
+	}
+
+	c, _ = Combination([]int{1, 2})
+	expectCombination = []interface{}{
+		[]interface{}{1},
+		[]interface{}{2},
+	}
+
+	if !reflect.DeepEqual(c, expectCombination) {
+		t.Errorf("%v is not equal to %v", c, expectCombination)
+	}
+
+	c, _ = Combination([]int{})
+	expectCombination = []interface{}{}
+
+	if !reflect.DeepEqual(c, expectCombination) {
+		t.Errorf("%v is not equal to %v", c, expectCombination)
+	}
 }
 
 func TestIsIncluded(t *testing.T) {

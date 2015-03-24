@@ -15,6 +15,21 @@ var (
 type MapFunc func(obj interface{}) interface{}
 type SelectFunc func(obj interface{}) bool
 
+// Combination returns a slice of all combinations of elements from all slices.
+// If slices is not a slice, then NotSliceErr is returned.
+func Combination(slices ...interface{}) ([]interface{}, error) {
+	slicesValue := reflect.ValueOf(slices)
+	if slicesValue.Kind() != reflect.Slice {
+		return make([]interface{}, 0), NotSliceErr
+	}
+
+	combinations := make([]interface{}, 0)
+	singleCombination := make([]interface{}, slicesValue.Len())
+
+	err := combination(singleCombination, &combinations, 0, &slicesValue)
+	return combinations, err
+}
+
 // IsIncluded returns true if the specified element is present in the specified collection, otherwise returns false.
 // collection -> is the slice containing all the elements.
 // obj -> is the element to be seek.
@@ -84,4 +99,25 @@ func Select(collection interface{}, selectFunc SelectFunc) ([]interface{}, error
 	}
 
 	return newColl, nil
+}
+
+func combination(singleCombination []interface{}, combinations *[]interface{}, deepLevel int, slicesValue *reflect.Value) error {
+	slice := slicesValue.Index(deepLevel).Interface()
+	sliceValue := reflect.ValueOf(slice)
+
+	if sliceValue.Kind() != reflect.Slice {
+		return NotSliceErr
+	}
+
+	for i := 0; i < sliceValue.Len(); i++ {
+		singleCombination[deepLevel] = sliceValue.Index(i).Interface()
+
+		if nextLevel := deepLevel + 1; nextLevel < slicesValue.Len() {
+			combination(singleCombination, combinations, nextLevel, slicesValue)
+		} else {
+			*combinations = append(*combinations, append([]interface{}{}, singleCombination...))
+		}
+	}
+
+	return nil
 }
