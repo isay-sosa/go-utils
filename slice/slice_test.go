@@ -3,16 +3,17 @@ package utils
 import (
 	"fmt"
 	"testing"
+	"github.com/OscarSwanros/go-utils/utils"
 )
 
 type TestStruct struct {
 	Value string
 }
 
-func TestIsIncluded(t *testing.T) {
+func TestIncludes(t *testing.T) {
 	slice := []string{"a", "b", "c", "d"}
 
-	include, err := IsIncluded(slice, "c")
+	include, err := Includes(slice, "c")
 	if !include {
 		t.Error("C element should be in collection, but it wasn't")
 	}
@@ -21,7 +22,7 @@ func TestIsIncluded(t *testing.T) {
 		t.Errorf("Error should be nil, but was %s", err.Error())
 	}
 
-	include, err = IsIncluded(slice, "z")
+	include, err = Includes(slice, "z")
 	if include {
 		t.Error("Z element should not be in collection, but it was")
 	}
@@ -30,7 +31,7 @@ func TestIsIncluded(t *testing.T) {
 		t.Error("Error should be not found, but it was nil")
 	}
 
-	include, err = IsIncluded("Not Collection", nil)
+	include, err = Includes("Not Collection", nil)
 	if include {
 		t.Error("nil should no tbe in collection, but it was")
 	}
@@ -71,8 +72,8 @@ func TestMap(t *testing.T) {
 		t.Errorf("New collection len should be 0, but was %d", size)
 	}
 
-	if err == nil || err != NotSliceErr {
-		t.Errorf("Error should be %v, but was %v", NotSliceErr, err)
+	if err == nil || err.Error() != utils.NewError(ErrorNotASlice).Error() {
+		t.Errorf("Error should be %v, but was %v", utils.NewError(ErrorNotASlice), err)
 	}
 
 	newCollection, err = Map(collection, nil)
@@ -80,8 +81,8 @@ func TestMap(t *testing.T) {
 		t.Errorf("New collection len should be 0, but was %d", size)
 	}
 
-	if err == nil || err != NilMapFuncErr {
-		t.Errorf("Error should be %v, but was %v", NilMapFuncErr, err)
+	if err == nil || err.Error() != utils.NewError(ErrorNilMapFunc).Error() {
+		t.Errorf("Error should be %v, but was %v", utils.NewError(ErrorNilMapFunc), err)
 	}
 }
 
@@ -117,8 +118,8 @@ func TestSelect(t *testing.T) {
 		t.Errorf("New collection len should be 0, but was %d", size)
 	}
 
-	if err == nil || err != NotSliceErr {
-		t.Errorf("Error should be %v, but was %v", NotSliceErr, err)
+	if err == nil || err.Error() != utils.NewError(ErrorNotASlice).Error() {
+		t.Errorf("Error should be %v, but was %v", utils.NewError(ErrorNotASlice), err)
 	}
 
 	newCollection, err = Select(collection, nil)
@@ -126,7 +127,7 @@ func TestSelect(t *testing.T) {
 		t.Errorf("New collection len should be 0, but was %d", size)
 	}
 
-	if err == nil || err != NilSelectFuncErr {
-		t.Errorf("Error should be %v, but was %v", NilSelectFuncErr, err)
+	if err == nil || err.Error() != utils.NewError(ErrorNilSelectFunc).Error() {
+		t.Errorf("Error should be %v, but was %v", utils.NewError(ErrorNilSelectFunc), err)
 	}
 }

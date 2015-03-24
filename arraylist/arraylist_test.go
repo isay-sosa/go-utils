@@ -117,13 +117,13 @@ func TestAddAt_Several(t *testing.T) {
 	}
 }
 
-func TestAddFirst_Single(t *testing.T) {
+func TestAddHead_Single(t *testing.T) {
 	list := new(ArrayList)
 	for i := 1; i < 10; i++ {
 		list.Add(fmt.Sprintf("Element %d", i))
 	}
 
-	list.AddFirst("Element 0")
+	list.AddHead("Element 0")
 	if size := list.Size(); size != 10 {
 		t.Errorf("ArrayList should have a size of 10, but has %d", size)
 	}
@@ -133,7 +133,7 @@ func TestAddFirst_Single(t *testing.T) {
 	}
 }
 
-func TestAddFirst_Several(t *testing.T) {
+func TestAddHead_Several(t *testing.T) {
 	list := new(ArrayList)
 	for i := 10; i < 20; i++ {
 		list.Add(fmt.Sprintf("Element %d", i))
@@ -148,7 +148,7 @@ func TestAddFirst_Several(t *testing.T) {
 		slice[i] = fmt.Sprintf("Element %d", i)
 	}
 
-	list.AddFirst(slice...)
+	list.AddHead(slice...)
 
 	if size := list.Size(); size != 20 {
 		t.Errorf("ArrayList should have a size of 20, but has %d", size)
@@ -162,13 +162,13 @@ func TestAddFirst_Several(t *testing.T) {
 	}
 }
 
-func TestClear(t *testing.T) {
+func TestRemoveAll(t *testing.T) {
 	list := new(ArrayList)
 	for i := 0; i < 10; i++ {
 		list.Add(fmt.Sprintf("Element %d", i))
 	}
 
-	list.Clear()
+	list.RemoveAll()
 	if size := list.Size(); size != 0 {
 		t.Errorf("ArrayList should have a size of 0, but has %d", size)
 	}

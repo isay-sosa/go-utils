@@ -1,9 +1,12 @@
 package arraylist
 
 import (
-	"errors"
-	"fmt"
-	"reflect"
+	"github.com/OscarSwanros/go-utils/utils"
+)
+
+const (
+	ErrorElementNotFound = "The element was not found."
+	ErrorIndexOutOfRange = "Index out of range."
 )
 
 type ArrayList struct {
@@ -33,7 +36,7 @@ func (a *ArrayList) AddAt(pos int, objs ...interface{}) error {
 
 	switch pos {
 	case 0:
-		a.AddFirst(objs...)
+		a.AddHead(objs...)
 		break
 	case a.Size():
 		a.Add(objs...)
@@ -45,22 +48,15 @@ func (a *ArrayList) AddAt(pos int, objs ...interface{}) error {
 	return nil
 }
 
-// AddFirst inserts the specified elements to the beginning of this list.
+// AddHead inserts the specified elements to the beginning of the list.
 // objs -> are the elements to be appended to this list.
-func (a *ArrayList) AddFirst(objs ...interface{}) {
+func (a *ArrayList) AddHead(objs ...interface{}) {
 	a.slice = append(objs, a.slice...)
 }
 
-// Clear removes all of the elements from this list.
-func (a *ArrayList) Clear() {
-	tempSlice := a.slice
+// RemobeAll removes all of the elements from a list.
+func (a *ArrayList) RemoveAll() {
 	a.slice = []interface{}{}
-
-	go func() {
-		for i, _ := range tempSlice {
-			tempSlice[i] = nil
-		}
-	}()
 }
 
 // Get returns the element at the specified position in this list.
@@ -68,7 +64,7 @@ func (a *ArrayList) Clear() {
 // Can return index out of range error.
 func (a *ArrayList) Get(pos int) (interface{}, error) {
 	if err := a.checkRange(pos); err != nil {
-		return nil, indexOutOfRangeErr(pos, a.Size())
+		return nil, err
 	}
 
 	return a.slice[pos], nil
@@ -77,15 +73,13 @@ func (a *ArrayList) Get(pos int) (interface{}, error) {
 // IndexOf returns the index (0-based) of the first occurrence of the specified element in this list.
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) IndexOf(obj interface{}) int {
-	pos := -1
-
 	for i, o := range a.slice {
-		if reflect.DeepEqual(o, obj) {
+		if utils.Equal(o, obj) {
 			return i
 		}
 	}
 
-	return pos
+	return -1
 }
 
 // IsEmpty returns true if this list containes no elements.
@@ -96,27 +90,25 @@ func (a *ArrayList) IsEmpty() bool {
 // LastIndexOf returns the index (0-based) of the last occurrence of the specified element in this list.
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) LastIndexOf(obj interface{}) int {
-	pos := -1
-
 	for i := a.Size() - 1; i > -1; i-- {
-		if o := a.slice[i]; reflect.DeepEqual(o, obj) {
+		if o := a.slice[i]; utils.Equal(o, obj) {
 			return i
 		}
 	}
 
-	return pos
+	return -1
 }
 
 // Remove removes the first occurrence of the specified element from this list.
 // If element not found, it returns an element not found error.
 func (a *ArrayList) Remove(obj interface{}) error {
 	for i, o := range a.slice {
-		if reflect.DeepEqual(o, obj) {
+		if utils.Equal(o, obj) {
 			return a.RemoveAt(i)
 		}
 	}
 
-	return elementNotFoundErr(obj)
+	return utils.NewError(ErrorElementNotFound)
 }
 
 // RemoveAt removes the element at the specified position (0-based) in this list.
@@ -148,7 +140,7 @@ func (a *ArrayList) addAt(pos int, elements ...interface{}) {
 
 func (a *ArrayList) checkRangeForAddAt(pos int) error {
 	if pos > a.Size() || pos < 0 {
-		return indexOutOfRangeErr(pos, a.Size())
+		return utils.NewError(ErrorIndexOutOfRange)
 	}
 
 	return nil
@@ -156,18 +148,8 @@ func (a *ArrayList) checkRangeForAddAt(pos int) error {
 
 func (a *ArrayList) checkRange(pos int) error {
 	if pos > a.Size()-1 || pos < 0 {
-		return indexOutOfRangeErr(pos, a.Size())
+		return utils.NewError(ErrorIndexOutOfRange)
 	}
 
 	return nil
-}
-
-func elementNotFoundErr(obj interface{}) error {
-	errStr := fmt.Sprintf("%v element was not found in this list.", obj)
-	return errors.New(errStr)
-}
-
-func indexOutOfRangeErr(pos, listSize int) error {
-	errStr := fmt.Sprintf("Index %d is out of range from a list size of %d", pos, listSize)
-	return errors.New(errStr)
 }
