@@ -38,7 +38,16 @@ In the Java world, arraylists are very common. Go utils implements an ArrayList 
         slice := list.Slice() // => ["Element", "Foo", 20, false, nil, "Bar"]
     }
 
-## Map
+## Slices functions
+### IsIncluded
+This function is based on Ruby's include? method. It receives a slice and an object. It returns true if the object is included in the slice.
+
+    slice := []string{"a", "b", "c", "d"}
+    include, err := IsIncluded(slice, "c") // => true, nil
+
+    include, err = IsIncluded(slice, "z")  // => false, element not found
+
+### Map
 This function is based on Ruby's map. It receives a slice and a function (mapFunc) and returns a new slice containing the returned values by the mapFunc.
 
     type User struct {
@@ -66,7 +75,7 @@ This function is based on Ruby's map. It receives a slice and a function (mapFun
         fmt.Println(ids) // => [1, 2, 3]
     }
 
-## Select
+### Select
 This function is based on Ruby's select. It receives a slice and a function (selectFunc) and returns a new slice containing the elements of which the selectFunc returns true.
 
     type User struct {
