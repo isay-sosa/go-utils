@@ -33,7 +33,7 @@ func (a *ArrayList) AddAt(pos int, objs ...interface{}) error {
 
 	switch pos {
 	case 0:
-		a.AddFirst(objs...)
+		a.AddHead(objs...)
 		break
 	case a.Size():
 		a.Add(objs...)
@@ -45,9 +45,9 @@ func (a *ArrayList) AddAt(pos int, objs ...interface{}) error {
 	return nil
 }
 
-// AddFirst inserts the specified elements to the beginning of this list.
+// AddHead inserts the specified elements to the beginning of the list.
 // objs -> are the elements to be appended to this list.
-func (a *ArrayList) AddFirst(objs ...interface{}) {
+func (a *ArrayList) AddHead(objs ...interface{}) {
 	a.slice = append(objs, a.slice...)
 }
 
