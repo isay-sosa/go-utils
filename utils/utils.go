@@ -21,3 +21,7 @@ func IsSlice(i interface{}) bool {
 func ValueOf(i interface{}) reflect.Value {
 	return reflect.ValueOf(i)
 }
+
+func Equal(a interface{}, b interface{}) bool {
+	return reflect.DeepEqual(a, b)
+}
