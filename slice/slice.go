@@ -14,12 +14,12 @@ const (
 type MapFunc func(obj interface{}) interface{}
 type SelectFunc func(obj interface{}) bool
 
-// IsIncluded returns true if the specified element is present in the specified collection, otherwise returns false.
+// Includes returns true if the specified element is present in the specified collection, otherwise returns false.
 // collection -> is the slice containing all the elements.
 // obj -> is the element to be seek.
 // If collection is not a slice, then NotSliceErr is returned.
 // If element is not found, then ElemNotFoundErr is returned.
-func IsIncluded(collection interface{}, obj interface{}) (bool, error) {
+func Includes(collection interface{}, obj interface{}) (bool, error) {
 	if !utils.IsSlice(collection) {
 		return false, utils.NewError(ErrorNotASlice)
 	}

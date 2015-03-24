@@ -9,10 +9,10 @@ type TestStruct struct {
 	Value string
 }
 
-func TestIsIncluded(t *testing.T) {
+func TestIncludes(t *testing.T) {
 	slice := []string{"a", "b", "c", "d"}
 
-	include, err := IsIncluded(slice, "c")
+	include, err := Includes(slice, "c")
 	if !include {
 		t.Error("C element should be in collection, but it wasn't")
 	}
@@ -21,7 +21,7 @@ func TestIsIncluded(t *testing.T) {
 		t.Errorf("Error should be nil, but was %s", err.Error())
 	}
 
-	include, err = IsIncluded(slice, "z")
+	include, err = Includes(slice, "z")
 	if include {
 		t.Error("Z element should not be in collection, but it was")
 	}
@@ -30,7 +30,7 @@ func TestIsIncluded(t *testing.T) {
 		t.Error("Error should be not found, but it was nil")
 	}
 
-	include, err = IsIncluded("Not Collection", nil)
+	include, err = Includes("Not Collection", nil)
 	if include {
 		t.Error("nil should no tbe in collection, but it was")
 	}
