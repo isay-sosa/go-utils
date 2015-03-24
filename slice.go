@@ -30,6 +30,25 @@ func Combination(slices ...interface{}) ([]interface{}, error) {
 	return combinations, err
 }
 
+// Compact returns a copy of the specified collection with all nil elements removed.
+// collection -> is the slice containing all the elements.
+// If slices is not a slice, then NotSliceErr is returned.
+func Compact(collection interface{}) ([]interface{}, error) {
+	collectionValue := reflect.ValueOf(collection)
+	if collectionValue.Kind() != reflect.Slice {
+		return make([]interface{}, 0), NotSliceErr
+	}
+
+	compact := make([]interface{}, 0, collectionValue.Len())
+	for i := 0; i < collectionValue.Len(); i++ {
+		if item := collectionValue.Index(i).Interface(); item != nil {
+			compact = append(compact, item)
+		}
+	}
+
+	return compact, nil
+}
+
 // IsIncluded returns true if the specified element is present in the specified collection, otherwise returns false.
 // collection -> is the slice containing all the elements.
 // obj -> is the element to be seek.

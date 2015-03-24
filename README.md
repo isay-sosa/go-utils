@@ -57,6 +57,18 @@ This function is based on Ruby's `product` method. It receives several slices an
     c, _ = Combination([]int{})
     // => []
 
+### Compact
+This function is based on Ruby's `compact` method. It receives a slice and returns a new slice with all nil elements removed.
+
+    slice := []interface{}{
+        []int{1, 4, 5},
+        nil,
+        []int{2, 4, 6},
+        []int{2, 3, 5},
+    }
+
+    c, _ := Compact(slice) // => [[1 4 5] [2 4 6] [2 3 5]]
+
 ### IsIncluded
 This function is based on Ruby's `include?` method. It receives a slice and an object. It returns true if the object is included in the slice.
 

@@ -71,6 +71,26 @@ func TestCombination(t *testing.T) {
 	}
 }
 
+func TestCompact(t *testing.T) {
+	slice := []interface{}{
+		[]int{1, 4, 5},
+		nil,
+		[]int{2, 4, 6},
+		[]int{2, 3, 5},
+	}
+
+	c, _ := Compact(slice)
+	if size := len(c); size != 3 {
+		t.Errorf("Slice len should be 3, but was %d", size)
+	}
+
+	for _, item := range c {
+		if item == nil {
+			t.Error("Item should not be nil, but it was")
+		}
+	}
+}
+
 func TestIsIncluded(t *testing.T) {
 	slice := []string{"a", "b", "c", "d"}
 
