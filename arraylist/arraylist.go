@@ -163,11 +163,13 @@ func (a *ArrayList) checkRange(pos int) error {
 }
 
 func elementNotFoundErr(obj interface{}) error {
-	errStr := fmt.Sprintf("%v element was not found in this list.", obj)
-	return errors.New(errStr)
+	return genErr(fmt.Sprintf("%v element was not found in this list.", obj))
 }
 
 func indexOutOfRangeErr(pos, listSize int) error {
-	errStr := fmt.Sprintf("Index %d is out of range from a list size of %d", pos, listSize)
-	return errors.New(errStr)
+	return genErr(fmt.Sprintf("Index %d is out of range from a list size of %d", pos, listSize))
+}
+
+func genErr(e string) error {
+	return errors.New(e)
 }
