@@ -27,7 +27,7 @@ func Includes(collection interface{}, obj interface{}) (bool, error) {
 	value := utils.ValueOf(collection)
 	l := value.Len()
 
-	for i := 0; l; i++ {
+	for i := 0; i < l; i++ {
 		if item := value.Index(i).Interface(); utils.Equal(item, obj) {
 			return true, nil
 		}
