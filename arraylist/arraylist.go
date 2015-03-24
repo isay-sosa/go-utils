@@ -61,7 +61,7 @@ func (a *ArrayList) RemoveAll() {
 // Can return index out of range error.
 func (a *ArrayList) Get(pos int) (interface{}, error) {
 	if err := a.checkRange(pos); err != nil {
-		return nil, indexOutOfRangeErr(pos, a.Size())
+		return nil, err
 	}
 
 	return a.slice[pos], nil
@@ -70,15 +70,13 @@ func (a *ArrayList) Get(pos int) (interface{}, error) {
 // IndexOf returns the index (0-based) of the first occurrence of the specified element in this list.
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) IndexOf(obj interface{}) int {
-	pos := -1
-
 	for i, o := range a.slice {
 		if reflect.DeepEqual(o, obj) {
 			return i
 		}
 	}
 
-	return pos
+	return -1
 }
 
 // IsEmpty returns true if this list containes no elements.
@@ -89,15 +87,13 @@ func (a *ArrayList) IsEmpty() bool {
 // LastIndexOf returns the index (0-based) of the last occurrence of the specified element in this list.
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) LastIndexOf(obj interface{}) int {
-	pos := -1
-
 	for i := a.Size() - 1; i > -1; i-- {
 		if o := a.slice[i]; reflect.DeepEqual(o, obj) {
 			return i
 		}
 	}
 
-	return pos
+	return -1
 }
 
 // Remove removes the first occurrence of the specified element from this list.
