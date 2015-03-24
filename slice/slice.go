@@ -8,6 +8,7 @@ const (
 	ErrorNotASlice = "Collection value is not a Slice."
 	ErrorNilMapFunc = "MapFunc param is nil."
 	ErrorNilSelectFunc = "SelectFunc param is nil."
+	ErrorElementNotFound = "The element was not found."
 )
 
 type MapFunc func(obj interface{}) interface{}
@@ -19,18 +20,20 @@ type SelectFunc func(obj interface{}) bool
 // If collection is not a slice, then NotSliceErr is returned.
 // If element is not found, then ElemNotFoundErr is returned.
 func IsIncluded(collection interface{}, obj interface{}) (bool, error) {
-	collectionValue := reflect.ValueOf(collection)
-	if collectionValue.Kind() != reflect.Slice {
-		return false, NotSliceErr
+	if !utils.IsSlice(collection) {
+		return false, utils.NewError(ErrorNotASlice)
 	}
 
-	for i := 0; i < collectionValue.Len(); i++ {
-		if item := collectionValue.Index(i).Interface(); reflect.DeepEqual(item, obj) {
+	value := utils.ValueOf(collection)
+	l := value.Len()
+
+	for i := 0; l; i++ {
+		if item := value.Index(i).Interface(); utils.Equal(item, obj) {
 			return true, nil
 		}
 	}
 
-	return false, ElemNotFoundErr
+	return false, utils.NewError(ErrorElementNotFound)
 }
 
 // Map calls the specified mapFunc once for each element in the collection.
