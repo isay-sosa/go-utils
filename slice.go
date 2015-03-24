@@ -1,15 +1,13 @@
 package utils
 
 import (
-	"errors"
-	"reflect"
+	"github.com/OscarSwanros/go-utils/utils"
 )
 
-var (
-	NotSliceErr      = errors.New("collection value is not a Slice.")
-	NilMapFuncErr    = errors.New("map function is nil.")
-	NilSelectFuncErr = errors.New("select function is nil.")
-	ElemNotFoundErr  = errors.New("element not found.")
+const (
+	ErrorNotASlice = "Collection value is not a Slice."
+	ErrorNilMapFunc = "MapFunc param is nil."
+	ErrorNilSelectFunc = "SelectFunc param is nil."
 )
 
 type MapFunc func(obj interface{}) interface{}
@@ -42,18 +40,20 @@ func IsIncluded(collection interface{}, obj interface{}) (bool, error) {
 // If collection is not a slice, then NotSliceErr is returned.
 // If mapFunc is nil, then NilMapFuncErr is returned.
 func Map(collection interface{}, mapFunc MapFunc) ([]interface{}, error) {
-	collectionValue := reflect.ValueOf(collection)
-	if collectionValue.Kind() != reflect.Slice {
-		return make([]interface{}, 0), NotSliceErr
+	if !utils.IsSlice(collection) {
+		return nil, utils.NewError(ErrorNotASlice)
 	}
 
 	if mapFunc == nil {
-		return make([]interface{}, 0), NilMapFuncErr
+		return nil, utils.NewError(ErrorNilMapFunc)
 	}
 
-	newColl := make([]interface{}, collectionValue.Len())
-	for i := 0; i < collectionValue.Len(); i++ {
-		newColl[i] = mapFunc(collectionValue.Index(i).Interface())
+	value := utils.ValueOf(collection)
+	l := value.Len()
+
+	newColl := make([]interface{}, l)
+	for i := 0; i < l; i++ {
+		newColl[i] = mapFunc(value.Index(i).Interface())
 	}
 
 	return newColl, nil
@@ -67,18 +67,18 @@ func Map(collection interface{}, mapFunc MapFunc) ([]interface{}, error) {
 // If collection is not a slice, then NotSliceErr is returned.
 // If mapFunc is nil, then NilSelectFuncErr is returned.
 func Select(collection interface{}, selectFunc SelectFunc) ([]interface{}, error) {
-	collectionValue := reflect.ValueOf(collection)
-	if collectionValue.Kind() != reflect.Slice {
-		return make([]interface{}, 0), NotSliceErr
+	if !utils.IsSlice(collection) {
+		return nil, utils.NewError(ErrorNotASlice)
 	}
 
 	if selectFunc == nil {
-		return make([]interface{}, 0), NilSelectFuncErr
+		return nil, utils.NewError(ErrorNilSelectFunc)
 	}
 
+	value := utils.ValueOf(collection)
 	newColl := []interface{}{}
-	for i := 0; i < collectionValue.Len(); i++ {
-		if obj := collectionValue.Index(i).Interface(); selectFunc(obj) {
+	for i := 0; i < value.Len(); i++ {
+		if obj := value.Index(i).Interface(); selectFunc(obj) {
 			newColl = append(newColl, obj)
 		}
 	}
