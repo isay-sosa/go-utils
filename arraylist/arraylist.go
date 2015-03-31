@@ -16,14 +16,11 @@ func New() *ArrayList {
 }
 
 // Add appends the specified elements to the end of this list.
-// objs -> are the elements to be appended to this list.
 func (a *ArrayList) Add(objs ...interface{}) {
 	a.slice = append(a.slice, objs...)
 }
 
 // AddAt inserts the specified elements at the specified position in this list.
-// pos -> is the position at which the specified element is to be inserted (0-based).
-// objs -> are the elements to be appended to this list.
 // If pos is more than the list size or less than 0, then index out of range
 // error is returned. Nil otherwise.
 func (a *ArrayList) AddAt(pos int, objs ...interface{}) error {
@@ -46,21 +43,13 @@ func (a *ArrayList) AddAt(pos int, objs ...interface{}) error {
 }
 
 // AddFirst inserts the specified elements to the beginning of this list.
-// objs -> are the elements to be appended to this list.
 func (a *ArrayList) AddFirst(objs ...interface{}) {
 	a.slice = append(objs, a.slice...)
 }
 
 // Clear removes all of the elements from this list.
 func (a *ArrayList) Clear() {
-	tempSlice := a.slice
-	a.slice = []interface{}{}
-
-	go func() {
-		for i, _ := range tempSlice {
-			tempSlice[i] = nil
-		}
-	}()
+	a.slice = nil
 }
 
 // Get returns the element at the specified position in this list.
@@ -77,15 +66,13 @@ func (a *ArrayList) Get(pos int) (interface{}, error) {
 // IndexOf returns the index (0-based) of the first occurrence of the specified element in this list.
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) IndexOf(obj interface{}) int {
-	pos := -1
-
 	for i, o := range a.slice {
 		if reflect.DeepEqual(o, obj) {
 			return i
 		}
 	}
 
-	return pos
+	return -1
 }
 
 // IsEmpty returns true if this list containes no elements.
@@ -96,15 +83,13 @@ func (a *ArrayList) IsEmpty() bool {
 // LastIndexOf returns the index (0-based) of the last occurrence of the specified element in this list.
 // It can return -1 if this list does not contain the specified element.
 func (a *ArrayList) LastIndexOf(obj interface{}) int {
-	pos := -1
-
 	for i := a.Size() - 1; i > -1; i-- {
 		if o := a.slice[i]; reflect.DeepEqual(o, obj) {
 			return i
 		}
 	}
 
-	return pos
+	return -1
 }
 
 // Remove removes the first occurrence of the specified element from this list.

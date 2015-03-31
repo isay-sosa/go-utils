@@ -172,6 +172,11 @@ func TestClear(t *testing.T) {
 	if size := list.Size(); size != 0 {
 		t.Errorf("ArrayList should have a size of 0, but has %d", size)
 	}
+
+	list.Add(1, 2, 3)
+	if size := list.Size(); size != 3 {
+		t.Errorf("ArrayList should have a size of 3, but has %d", size)
+	}
 }
 
 func TestGet(t *testing.T) {
